@@ -17,27 +17,37 @@ def test_grades(grade_list):
         return 0
         
 
-def test_restaurant_grades(camis_id):
+def test_restaurant_grades(camis_id, clean_df):
     
     dataframe = clean_df[clean_df['CAMIS']==camis_id].sort('GRADE DATE')
     grade_list = list(dataframe['GRADE'])
     return test_grades(grade_list)
     
 
-def get_improvement(CAMIS_list):
+def get_improvement(CAMIS_list, clean_df):
     improvement = 0
     for id in CAMIS_list:
-        improvement = improvement + test_restaurant_grades(id)
+        improvement = improvement + test_restaurant_grades(id, clean_df)
     return improvement
 
 
 
+# def draw_graph(dataframe, filename):
+#     try:
+#         pivoted = dataframe.pivot('GRADE DATE', 'CAMIS', 'GRADE') 
+#         grade_counts = pivoted.apply(pd.Series.value_counts, axis=1) 
+#         grade_counts.plot()
+#         plt.savefig(filename)
+#         plt.close()
+#     except ValueError:
+#         pass
+
+
+
 def draw_graph(dataframe, filename):
-    try:
-        pivoted = dataframe.pivot('GRADE DATE', 'CAMIS', 'GRADE') 
-        grade_counts = pivoted.apply(pd.Series.value_counts, axis=1) 
-        grade_counts.plot()
-        plt.savefig(filename)
-        plt.close()
-    except ValueError:
-        pass
+
+    pivoted = dataframe.pivot('GRADE DATE', 'CAMIS', 'GRADE') 
+    grade_counts = pivoted.apply(pd.Series.value_counts, axis=1) 
+    grade_counts.plot()
+    plt.savefig(filename)
+    plt.close()
